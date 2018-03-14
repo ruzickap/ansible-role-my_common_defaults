@@ -2,4 +2,4 @@
 - name: Include OS-specific variables
   include_vars: "{{ ansible_os_family }}.yml"
 
-- import_tasks: common.yml
+- import_tasks: "{{ ansible_system | default('Linux') }}-common.yml"

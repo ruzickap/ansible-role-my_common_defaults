@@ -32,9 +32,7 @@ distribution_specific_packages:
 remove_distribution_specific_packages:
   - aic94xx-firmware
   - alsa-firmware
-  - alsa-lib
   - alsa-tools-firmware
-  - biosdevname
   - iprutils
   - ivtv-firmware
   - iwl100-firmware

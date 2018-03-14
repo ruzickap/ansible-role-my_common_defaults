@@ -49,3 +49,14 @@ enable_boot_services:
   - atop
   - haveged
   - serial-getty@ttyS1.service
+
+common_windows_packages:
+  - 7zip.install
+  - bginfo
+  - far
+  - chromium
+  - conemu
+  - notepadplusplus.install
+  - openssh
+  - putty.install
+  - winscp

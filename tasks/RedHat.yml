@@ -6,8 +6,7 @@
 
 - name: Remove useless packages
   package: name={{ item }} state=absent
-  with_items:
-    - "{{ remove_distribution_specific_packages }}"
+  with_items: "{{ remove_distribution_specific_packages }}"
   when: remove_distribution_specific_packages
   tags:
     - packages

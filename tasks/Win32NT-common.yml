@@ -13,17 +13,17 @@
 
 - name: Enable Remote Desktop
   win_regedit:
-    key: 'HKLM:\System\CurrentControlSet\Control\Terminal Server'
-    value: fDenyTSConnections
+    path: 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server'
+    name: fDenyTSConnections
     data: 0
-    datatype: dword
+    type: dword
 
 - name: Allow connections from computers running any version of Remote Desktop (less secure)
   win_regedit:
-    key: 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp'
-    value: UserAuthentication
+    path: 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp'
+    name: UserAuthentication
     data: 0
-    datatype: dword
+    type: dword
 
 - name: Allow RDP traffic
   win_shell: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
@@ -34,8 +34,49 @@
     account_disabled: no
   when: ansible_distribution | search("Microsoft Windows 10")
 
+- name: Show file extensions in Explorer
+  win_regedit:
+    path: 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+    name: HideFileExt
+    data: 0
+    type: dword
+
+- name: Show hidden files
+  win_regedit:
+    path: 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+    name: "{{ item }}"
+    data: 1
+    type: dword
+  with_items:
+    - Hidden
+    - SuperHidden
+    - ShowSuperHidden
+
+- name: Enable QuickEdit mode
+  win_regedit:
+    path: 'HKCU:\Console'
+    name: QuickEdit
+    data: 1
+    type: dword
+  when: ansible_distribution | search("Microsoft Windows Server 2012")
+
+- block:
+  - name: Zero Hibernation File
+    win_regedit:
+      path: 'HKLM:\SYSTEM\CurrentControlSet\Control\Power'
+      name: HibernateFileSizePercent
+      data: 0
+      type: dword
+
+  - name: Disable Hibernation Mode
+    win_regedit:
+      path: 'HKLM:\SYSTEM\CurrentControlSet\Control\Power'
+      name: HibernateEnabled
+      data: 0
+      type: dword
+  when: ansible_distribution | search("Microsoft Windows 10")
+
 # Windows Updates is not working in ansible-2.4.0.0-1.fc27 and latest Ansible 2.4.2 is not working at all with Packer + WinRM
 # That's the reason why updates are disabled for now...
 #- name: Install windows updates
 #  win_updates:
-

@@ -3,13 +3,65 @@
     name: "{{ item }}"
   with_items: "{{ common_windows_packages }}"
 
+- name: Install openssh
+  win_chocolatey:
+    name: openssh
+    params: /SSHServerFeature /KeyBasedAuthenticationFeature
+
+- name: Firewall rule to allow SSH on TCP port 22
+  win_firewall_rule:
+    name: OpenSSH
+    localport: 22
+    action: allow
+    direction: in
+    protocol: tcp
+
+- name: Set Desktop Solid Color
+  win_regedit:
+    path: 'HKCU:\Control Panel\Colors'
+    name: Background
+    data: "74 84 89"
+
+- name: Disable Logon Background Image
+  win_regedit:
+    path: 'HKLM:\Software\Policies\Microsoft\Windows\System'
+    name: DisableLogonBackgroundImage
+    data: 1
+    type: dword
+
 - name: Start NTP service (w32time)
   win_service:
     name: w32time
     state: started
+    start_mode: auto
 
 - name: Configure NTP
   win_command: w32tm /config /manualpeerlist:"{{ ntp_servers[0] }}" /reliable:yes /update
+  changed_when: false
+
+- name: Remove all current pagefiles
+  win_pagefile:
+    remove_all: yes
+    automatic: no
+    state: absent
+
+- name: Disable Hibernate Mode
+  win_command: powercfg -h off
+  changed_when: false
+  when: ansible_distribution | search("Microsoft Windows 10")
+
+- name: Disable Secure Logon using Registry (Ctrl+Alt+Del sequence for logging)
+  win_regedit:
+    path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+    name: DisableCAD
+    data: 1
+    type: dword
+
+- name: Enable Administrator account
+  win_user:
+    name: Administrator
+    account_disabled: no
+  when: ansible_distribution | search("Microsoft Windows 10")
 
 - name: Enable Remote Desktop
   win_regedit:
@@ -27,12 +79,14 @@
 
 - name: Allow RDP traffic
   win_shell: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+  changed_when: false
 
-- name: Enable Administrator account
-  win_user:
-    name: Administrator
-    account_disabled: no
-  when: ansible_distribution | search("Microsoft Windows 10")
+- name: Allow ICMP
+  win_firewall_rule:
+    name: File and Printer Sharing (Echo Request – ICMPv4-In)
+    action: allow
+    direction: in
+    enabled: yes
 
 - name: Show file extensions in Explorer
   win_regedit:
@@ -50,7 +104,7 @@
   with_items:
     - Hidden
     - SuperHidden
-    - ShowSuperHidden
+    # - ShowSuperHidden
 
 - name: Enable QuickEdit mode
   win_regedit:
@@ -60,21 +114,78 @@
     type: dword
   when: ansible_distribution | search("Microsoft Windows Server 2012")
 
-- block:
-  - name: Zero Hibernation File
-    win_regedit:
-      path: 'HKLM:\SYSTEM\CurrentControlSet\Control\Power'
-      name: HibernateFileSizePercent
-      data: 0
-      type: dword
+- name: Enable telnet
+  win_feature:
+    name: telnet-client
+  when: not ansible_distribution | search("Microsoft Windows 10")
 
-  - name: Disable Hibernation Mode
-    win_regedit:
-      path: 'HKLM:\SYSTEM\CurrentControlSet\Control\Power'
-      name: HibernateEnabled
-      data: 0
-      type: dword
-  when: ansible_distribution | search("Microsoft Windows 10")
+- name: Put PuTTY link to desktop
+  win_copy:
+    src: '%PROGRAMDATA%\Microsoft\Windows\Start Menu\Programs\PuTTY (64-bit)\PuTTY.lnk'
+    dest: '%PUBLIC%\Desktop\'
+    remote_src: true
+
+- name: Configure PuTTY
+  win_regedit:
+    path: 'HKCU:\SOFTWARE\SimonTatham\PuTTY\Sessions\Default%20Settings'
+    name: "{{ item.name }}"
+    data: "{{ item.data }}"
+    type: dword
+  with_items:
+    - { name: TCPKeepalives, data: 1 }
+    - { name: PingIntervalSecs, data: 30 }
+    - { name: Compression, data: 1 }
+    - { name: AgentFwd, data: 1 }
+    - { name: LinuxFunctionKeys, data: 1 }
+    - { name: MouseIsXterm, data: 1 }
+    - { name: ConnectionSharing, data: 1 }
+
+- name: Configure WinSCP
+  win_copy:
+    src: win/WinSCP.ini
+    dest: '%PROGRAMFILES(x86)%\WinSCP\WinSCP.ini'
+
+- name: Enable allowGlobalConfirmation for Chocolatey
+  win_command: choco feature enable -n allowGlobalConfirmation
+  register: choco_feature_enable
+  changed_when: choco_feature_enable.stdout | search('Enabled allowGlobalConfirmation')
+
+- name: Put Doublecmd link to desktop
+  win_copy:
+    src: '%APPDATA%\Microsoft\Windows\Start Menu\Programs\Double Commander\Double Commander.lnk'
+    dest: '%PUBLIC%\Desktop\'
+    remote_src: true
+
+- name: Create config directory for Doublecmd
+  win_file:
+    path: '%APPDATA%\doublecmd'
+    state: directory
+
+- name: Upload Dolublecmd configuration file
+  win_copy:
+    src: win/doublecmd.xml
+    dest: '%APPDATA%\doublecmd\doublecmd.xml'
+
+- win_scheduled_task:
+    name: choco upgrade
+    executable: choco
+    arguments: upgrade all -y
+    time: 12am
+    frequency: daily
+    state: present
+    runlevel: highest
+    user: SYSTEM
+
+- name: Upload bginfo config file
+  win_copy:
+    src: win/bginfo.bgi
+    dest: '%PROGRAMDATA%\bginfo.bgi'
+
+- name: Start bginfo after login
+  win_regedit:
+    path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run'
+    name: bginfo
+    data: 'C:\ProgramData\chocolatey\bin\bginfo.exe C:\ProgramData\bginfo.bgi /silent /timer:0 /nolicprompt'
 
 # Windows Updates is not working in ansible-2.4.0.0-1.fc27 and latest Ansible 2.4.2 is not working at all with Packer + WinRM
 # That's the reason why updates are disabled for now...

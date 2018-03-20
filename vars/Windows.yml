@@ -1,0 +1,11 @@
+---
+common_windows_packages:
+  - 7zip.install
+  - bginfo
+  - bleachbit
+  - conemu
+  - doublecmd
+  - notepadplusplus.install
+  - putty.install
+  - ultradefrag
+  - winscp

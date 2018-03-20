@@ -1,5 +1,4 @@
 ---
-
 mc_wrapper_sh_path: /usr/libexec/mc/mc-wrapper.sh
 
 vimrc_configuration_file: /etc/vimrc

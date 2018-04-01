@@ -49,6 +49,5 @@ script:
   # Add your own tests depending on your $ROLE
   - echo "=======> Starting output tests"
 
-
 #notifications:
 #  webhooks: https://galaxy.ansible.com/api/v1/notifications/

@@ -1,13 +1,17 @@
 ---
-- name: Upgrade packages
-  yum: name=* state=latest
+- name: Remove useless packages
+  package:
+    name: "{{ item }}"
+    state: absent
+  with_items: "{{ remove_distribution_specific_packages }}"
+  when: remove_distribution_specific_packages
   tags:
     - packages
 
-- name: Remove useless packages
-  package: name={{ item }} state=absent
-  with_items: "{{ remove_distribution_specific_packages }}"
-  when: remove_distribution_specific_packages
+- name: Upgrade packages
+  yum:
+    name: '*'
+    state: latest
   tags:
     - packages
 
@@ -43,18 +47,22 @@
     - audit
 
 - name: Disable selinux
-  selinux: state=disabled
+  selinux:
+    state: disabled
   tags:
     - selinux
 
 - name: Check the presence of /etc/default/grub
-  stat: path=/etc/default/grub
+  stat:
+    path: /etc/default/grub
   register: grub_default
   tags:
     - grub
 
 - name: Backup grub settings
-  shell: cp /etc/default/grub /etc/default/grub.orig creates=/etc/default/grub.orig
+  shell: cp /etc/default/grub /etc/default/grub.orig
+  args:
+    creates: /etc/default/grub.orig
   tags:
     - grub
   when: grub_default.stat.exists == True
@@ -90,7 +98,9 @@
     - ntp
 
 - name: Backup original /etc/yum/yum-cron.conf and /etc/yum/yum-cron-hourly.conf if exists
-  shell: cp {{ item }} {{ item }}.orig creates={{ item }}.orig
+  shell: cp {{ item }} {{ item }}.orig
+  args:
+    creates: "{{ item }}.orig"
   with_fileglob:
     - /etc/yum/yum-cron.conf
     - /etc/yum/yum-cron-hourly.conf

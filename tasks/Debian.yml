@@ -1,12 +1,14 @@
 ---
 - name: Upgrade packages
-  apt: upgrade=yes
+  apt:
+    upgrade: yes
   tags:
     - packages
 
 # /etc/default/rcS exists in Ubunut 16.04 but not in 17.04
 - name: Check if /etc/default/rcS exists
-  stat: path=/etc/default/rcS
+  stat:
+    path: /etc/default/rcS
   register: rcS_stat
 
 - name: Enable fsckfix during boot

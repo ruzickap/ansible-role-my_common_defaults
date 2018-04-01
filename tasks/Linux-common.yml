@@ -1,24 +1,30 @@
 ---
 - name: Update repositories
-  apt: update_cache=yes
+  apt:
+    update_cache: yes
   when: ansible_os_family == 'Debian'
   changed_when: false
   tags:
     - packages
 
 - block:
+    - name: Check if EPEL repo is already configured
+      stat:
+        path: "{{ epel_repofile_path }}"
+      register: epel_repofile_result
     - name: Install EPEL repo
-      yum: name="{{ epel_repo_url }}"
-      register: result
-      until: '"failed" not in result'
-      retries: 5
-      delay: 10
+      yum:
+        name: "{{ epel_repo_url }}"
+      when: not epel_repofile_result.stat.exists
     - name: Import EPEL GPG key
-      rpm_key: key="{{ epel_repo_gpg_key_url }}"
+      rpm_key:
+        key: "{{ epel_repo_gpg_key_url }}"
+      when: not epel_repofile_result.stat.exists
   when: ansible_os_family == 'RedHat'
 
 - name: Install common packages
-  package: name={{ item }}
+  package:
+    name: "{{ item }}"
   with_items:
     - "{{ common_packages }}"
     - "{{ distribution_specific_packages }}"
@@ -26,26 +32,35 @@
     - packages
 
 - name: Chnage root password
-  user: name=root password={{ root_password | password_hash('sha512') }}
+  user:
+    name: root
+    password: "{{ root_password | password_hash('sha512') }}"
   changed_when: False
   tags:
     - users
 
 - name: Disable mouse in mc (/etc/profile.d/mc.sh)
-  template: src=etc/profile.d/my-mc.sh.j2 dest=/etc/profile.d/my-mc.sh
+  template:
+    src: etc/profile.d/my-mc.sh.j2
+    dest: /etc/profile.d/my-mc.sh
   tags:
     - mc
 
 - name: Create directory "/etc/skel/.config/mc"
-  file: path=/etc/skel/.config/mc state=directory
+  file:
+    path: /etc/skel/.config/mc
+    state: directory
 
 - name: Create directory for mc inside /etc/skel
-  copy: src=etc/skel/.config/mc/ini dest=/etc/skel/.config/mc/
+  copy:
+    src: etc/skel/.config/mc/ini
+    dest: /etc/skel/.config/mc/
   tags:
     - mc
 
 - name: Check if user dirctory exists
-  stat: path={{ item }}
+  stat:
+    path: "{{ item }}"
   with_items: "{{ skel_copy_users }}"
   register: stat_skel_copy_users
   tags:
@@ -53,7 +68,9 @@
     - skel
 
 - name: Copy /etc/skel/.config/ directory to root
-  command: cp -r /etc/skel/.config {{ item.stat.path }} creates={{ item.stat.path }}/.config
+  command: cp -r /etc/skel/.config {{ item.stat.path }}
+  args:
+    creates: "{{ item.stat.path }}/.config"
   when: item.stat.exists
   with_items: "{{ stat_skel_copy_users.results }}"
   loop_control:
@@ -156,7 +173,9 @@
     - logwatch
 
 - name: Move logwatch cron entry from cron.daily to cron.weekly
-  command: mv /etc/cron.daily/{{ logwatch_cron_daily_file }} /etc/cron.weekly/ creates=/etc/cron.weekly/{{ logwatch_cron_daily_file }}
+  command: mv /etc/cron.daily/{{ logwatch_cron_daily_file }} /etc/cron.weekly/
+  args:
+    creates: "/etc/cron.weekly/{{ logwatch_cron_daily_file }}"
   tags:
     - logwatch
     - cron
@@ -222,7 +241,9 @@
     - sysstat
 
 - name: Configure cloud-init
-  template: src=etc/cloud/cloud.cfg.d/91_my.cfg dest=/etc/cloud/cloud.cfg.d/
+  template:
+    src: etc/cloud/cloud.cfg.d/91_my.cfg
+    dest: /etc/cloud/cloud.cfg.d/
   tags:
     - cloud-init
 
@@ -245,7 +266,8 @@
     - fstab
 
 - name: Check if /root/.ssh/authorized_keys exists
-  stat: path=/root/.ssh/authorized_keys
+  stat:
+    path: /root/.ssh/authorized_keys
   register: root_authorized_keys
   tags:
     - ssh

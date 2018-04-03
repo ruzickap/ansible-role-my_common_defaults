@@ -48,7 +48,7 @@
 - name: Disable Hibernate Mode
   win_command: powercfg -h off
   changed_when: false
-  when: ansible_distribution | search("Microsoft Windows 10")
+  when: ansible_distribution is search("Microsoft Windows 10")
 
 - name: Disable Secure Logon using Registry (Ctrl+Alt+Del sequence for logging)
   win_regedit:
@@ -61,7 +61,7 @@
   win_user:
     name: Administrator
     account_disabled: no
-  when: ansible_distribution | search("Microsoft Windows 10")
+  when: ansible_distribution is search("Microsoft Windows 10")
 
 - name: Enable Remote Desktop
   win_regedit:
@@ -112,12 +112,12 @@
     name: QuickEdit
     data: 1
     type: dword
-  when: ansible_distribution | search("Microsoft Windows Server 2012")
+  when: ansible_distribution is search("Microsoft Windows Server 2012")
 
 - name: Enable telnet
   win_feature:
     name: telnet-client
-  when: not ansible_distribution | search("Microsoft Windows 10")
+  when: ansible_distribution is not search("Microsoft Windows 10")
 
 - name: Put PuTTY link to desktop
   win_copy:
@@ -148,7 +148,7 @@
 - name: Enable allowGlobalConfirmation for Chocolatey
   win_command: choco feature enable -n allowGlobalConfirmation
   register: choco_feature_enable
-  changed_when: choco_feature_enable.stdout | search('Enabled allowGlobalConfirmation')
+  changed_when: choco_feature_enable.stdout is search('Enabled allowGlobalConfirmation')
 
 - name: Put Doublecmd link to desktop
   win_copy:

@@ -20,6 +20,7 @@ distribution_specific_packages:
   - dnsutils
   - bsd-mailx
   - ifenslave
+  - libpam-systemd
   - linux-virtual
   - mtr-tiny
   - snmp

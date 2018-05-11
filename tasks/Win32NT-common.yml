@@ -187,7 +187,5 @@
     name: bginfo
     data: 'C:\ProgramData\chocolatey\bin\bginfo.exe C:\ProgramData\bginfo.bgi /silent /timer:0 /nolicprompt'
 
-# Windows Updates is not working in ansible-2.4.0.0-1.fc27 and latest Ansible 2.4.2 is not working at all with Packer + WinRM
-# That's the reason why updates are disabled for now...
-#- name: Install windows updates
-#  win_updates:
+- name: Install windows updates
+  win_updates:

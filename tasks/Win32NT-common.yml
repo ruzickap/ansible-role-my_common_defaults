@@ -168,7 +168,8 @@
 
 - win_scheduled_task:
     name: choco upgrade
-    executable: choco
+    actions:
+      - path: choco.exe
     arguments: upgrade all -y
     time: 12am
     frequency: daily

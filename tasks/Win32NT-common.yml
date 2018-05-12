@@ -168,14 +168,15 @@
 
 - win_scheduled_task:
     name: choco upgrade
+    description: Chocolatey update task - updates all apps installed by Chocolatey
     actions:
       - path: choco.exe
-    arguments: upgrade all -y
-    time: 12am
-    frequency: daily
-    state: present
-    runlevel: highest
-    user: SYSTEM
+        arguments: upgrade all -y
+    triggers:
+      - type: daily
+        start_boundary: '2017-10-09T01:00:00'
+    run_level: highest
+    username: SYSTEM
 
 - name: Upload bginfo config file
   win_copy:

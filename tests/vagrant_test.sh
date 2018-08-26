@@ -1,7 +1,7 @@
 #!/bin/bash -eu
 
 TEMP_PATH="/tmp/mytest/"
-VAGRANT_BOXES="peru/windows-server-2016-standard-x64-eval peru/windows-10-enterprise-x64-eval peru/windows-server-2012-r2-standard-x64-eval"
+VAGRANT_BOXES="peru/windows-server-2016-standard-x64-eval peru/windows-10-enterprise-x64-eval peru/windows-server-2012_r2-standard-x64-eval"
 
 HOSTS=""
 for VAGRANT_BOX in $VAGRANT_BOXES; do

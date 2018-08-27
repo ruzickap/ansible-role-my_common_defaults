@@ -36,6 +36,7 @@
     name: root
     password: "{{ root_password | password_hash('sha512') }}"
   changed_when: False
+  when: root_password is defined
   tags:
     - users
 
@@ -50,6 +51,8 @@
   file:
     path: /etc/skel/.config/mc
     state: directory
+  tags:
+    - mc
 
 - name: Create directory for mc inside /etc/skel
   copy:

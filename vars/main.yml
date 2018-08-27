@@ -1,6 +1,4 @@
 ---
-root_password: vagrant
-
 skel_copy_users:
   - /home/ubuntu
   - /home/centos

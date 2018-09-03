@@ -71,7 +71,7 @@
     dest: /etc/default/grub
     regexp: "{{ item.regexp }}"
     replace: "{{ item.replace }}"
-  with_items:
+  loop:
     - { regexp: '^GRUB_TIMEOUT=.*', replace: 'GRUB_TIMEOUT=1' }
     - { regexp: 'nofb quiet splash=quiet', replace: 'nofb quiet rootflags=usrquota,grpquota vmwgfx.enable_fbdev=0 verbose consoleblank=0 no_timer_check splash=quiet' }
   notify: generate grub configuration
@@ -100,7 +100,7 @@
   shell: cp {{ item }} {{ item }}.orig
   args:
     creates: "{{ item }}.orig"
-  with_fileglob:
+  loop:
     - /etc/yum/yum-cron.conf
     - /etc/yum/yum-cron-hourly.conf
   register: yum_cron_cp_status
@@ -112,7 +112,7 @@
     path: /etc/yum/yum-cron.conf
     regexp: "{{ item.regexp }}"
     replace: "{{ item.replace }}"
-  with_items:
+  loop:
     - { regexp: '^apply_updates.*', replace: 'apply_updates = yes' }
   when: yum_cron_cp_status.changed
   tags:
@@ -123,7 +123,7 @@
     dest: /etc/yum/yum-cron-hourly.conf
     regexp: "{{ item.regexp }}"
     replace: "{{ item.replace }}"
-  with_items:
+  loop:
     - { regexp: '^update_cmd.*', replace: 'update_cmd = security-severity:Critical' }
     - { regexp: '^apply_updates.*', replace: 'apply_updates = yes' }
     - { regexp: '^update_messages.*', replace: 'update_messages = yes' }

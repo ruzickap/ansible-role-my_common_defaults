@@ -24,10 +24,7 @@
 
 - name: Install common packages
   package:
-    name: "{{ item }}"
-  with_items:
-    - "{{ common_packages }}"
-    - "{{ distribution_specific_packages }}"
+    name: "{{ common_packages + distribution_specific_packages }}"
   tags:
     - packages
 
@@ -64,7 +61,7 @@
 - name: Check if user dirctory exists
   stat:
     path: "{{ item }}"
-  with_items: "{{ skel_copy_users }}"
+  loop: "{{ skel_copy_users }}"
   register: stat_skel_copy_users
   tags:
     - mc
@@ -75,7 +72,7 @@
   args:
     creates: "{{ item.stat.path }}/.config"
   when: item.stat.exists
-  with_items: "{{ stat_skel_copy_users.results }}"
+  loop: "{{ stat_skel_copy_users.results }}"
   loop_control:
     label: "{{ item.item }}"
   tags:
@@ -90,7 +87,7 @@
     owner: "{{ item.stat.path | basename }}"
     group: "{{ item.stat.path | basename }}"
   when: item.stat.exists
-  with_items: "{{ stat_skel_copy_users.results }}"
+  loop: "{{ stat_skel_copy_users.results }}"
   loop_control:
     label: "{{ item.item }}"
   tags:
@@ -103,7 +100,7 @@
     state: directory
     mode: 0700
   when: item.stat.exists
-  with_items: "{{ stat_skel_copy_users.results }}"
+  loop: "{{ stat_skel_copy_users.results }}"
   loop_control:
     label: "{{ item.item }}"
   tags:
@@ -214,7 +211,7 @@
     dest: /etc/ssh/sshd_config
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
-  with_items:
+  loop:
     - { regexp: '^PermitRootLogin', line: 'PermitRootLogin yes' }
     - { regexp: '^PasswordAuthentication', line: 'PasswordAuthentication yes' }
   notify: restart sshd
@@ -291,9 +288,7 @@
 
 - name: Install spice / qxl packages (needed for desktop)
   package:
-    name: "{{ item }}"
-  with_items:
-    - "{{ desktop_spice_packages }}"
+    name: "{{ desktop_spice_packages }}"
   when:  xserver_status.stat.exists
 
 - include_tasks: "{{ ansible_os_family }}.yml"
@@ -303,9 +298,8 @@
     name: "{{ item }}"
     state: stopped
     enabled: no
-  with_items:
-    - "{{ disable_distribution_specific_boot_services }}"
-  when: disable_distribution_specific_boot_services
+  loop: "{{ disable_distribution_specific_boot_services }}"
+  when: disable_distribution_specific_boot_services is defined
   # Workaround for RHEL7 / CentOS6
   failed_when: false
   tags:
@@ -315,7 +309,7 @@
   service:
     name: "{{ item }}"
     enabled: yes
-  with_items: "{{ enable_distribution_specific_boot_services }}"
-  when: enable_distribution_specific_boot_services
+  loop: "{{ enable_distribution_specific_boot_services }}"
+  when: enable_distribution_specific_boot_services is defined
   tags:
     - services

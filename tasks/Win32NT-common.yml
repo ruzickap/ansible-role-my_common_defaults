@@ -1,7 +1,7 @@
 - name: Install applications
   win_chocolatey:
     name: "{{ item }}"
-  with_items: "{{ common_windows_packages }}"
+  loop: "{{ common_windows_packages }}"
 
 - name: Install openssh
   win_chocolatey:
@@ -101,10 +101,9 @@
     name: "{{ item }}"
     data: 1
     type: dword
-  with_items:
+  loop:
     - Hidden
     - SuperHidden
-    # - ShowSuperHidden
 
 - name: Enable QuickEdit mode
   win_regedit:
@@ -131,7 +130,7 @@
     name: "{{ item.name }}"
     data: "{{ item.data }}"
     type: dword
-  with_items:
+  loop:
     - { name: TCPKeepalives, data: 1 }
     - { name: PingIntervalSecs, data: 30 }
     - { name: Compression, data: 1 }

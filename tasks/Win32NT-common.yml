@@ -1,7 +1,6 @@
 - name: Install applications
   win_chocolatey:
-    name: "{{ item }}"
-  loop: "{{ common_windows_packages }}"
+    name: "{{ common_windows_packages }}"
 
 - name: Install openssh
   win_chocolatey:

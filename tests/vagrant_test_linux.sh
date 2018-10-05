@@ -1,6 +1,6 @@
 #!/bin/bash -eu
 
-TEMP_PATH="/tmp/mytest/"
+TEMP_PATH="/tmp/vagrant_test_linux/"
 VAGRANT_BOXES="centos/7 peru/ubuntu-18.04-server-amd64 peru/ubuntu-16.04-server-amd64 peru/ubuntu-14.04-server-amd64"
 ANSIBLE_ROLE_DIR="$PWD/../"
 
@@ -15,6 +15,7 @@ for VAGRANT_BOX in $VAGRANT_BOXES; do
   if [ ! -f $TEMP_PATH/$BOX/Vagrantfile ]; then
     test -d "$TEMP_PATH/$BOX" || mkdir -v -p "$TEMP_PATH/$BOX"
 
+    docker pull peru/vagrant_libvirt_virtualbox
     docker run --rm -it -u $(id -u):$(id -g) --privileged --net=host \
     -e HOME=/home/docker \
     -e VAGRANT_DEFAULT_PROVIDER=libvirt \
@@ -30,11 +31,10 @@ for VAGRANT_BOX in $VAGRANT_BOXES; do
     && vagrant up \
     && VAGRANT_USER=\`vagrant ssh-config | awk '/User / { print \$2 }'\` \
     && VAGRANT_HOST=\`vagrant ssh-config | awk '/HostName / { print \$2 }'\` \
-    && VAGRANT_PORT=\`vagrant ssh-config | awk '/Port / { print \$2 }'\` \
     && VAGRANT_PRIVATE_SSH_KEY=\`vagrant ssh-config | awk '/IdentityFile/ { print \$2 }'\` \
     && vagrant ssh --command \"test -e /usr/bin/python || ( test -x /usr/bin/apt && ( sudo apt -qqy update && sudo apt install -y python-minimal ) || ( test -x /usr/bin/yum && sudo yum install -y python ))\" \
-    && ansible-playbook --private-key \$VAGRANT_PRIVATE_SSH_KEY --extra-vars \"ansible_port=\$VAGRANT_PORT ansible_user=\$VAGRANT_USER\" -i \$VAGRANT_HOST, \$HOME/ansible_role/tests/test.yml \
-    && ansible-playbook --private-key \$VAGRANT_PRIVATE_SSH_KEY --extra-vars \"ansible_port=\$VAGRANT_PORT ansible_user=\$VAGRANT_USER\" -i \$VAGRANT_HOST, \$HOME/ansible_role/tests/test.yml \
+    && ansible-playbook --become --private-key \$VAGRANT_PRIVATE_SSH_KEY --extra-vars \"ansible_user=\$VAGRANT_USER\" -i \$VAGRANT_HOST, \$HOME/ansible_role/tests/test.yml \
+    && ansible-playbook --become --private-key \$VAGRANT_PRIVATE_SSH_KEY --extra-vars \"ansible_user=\$VAGRANT_USER\" -i \$VAGRANT_HOST, \$HOME/ansible_role/tests/test.yml \
     ;  vagrant destroy -f \
     "
 

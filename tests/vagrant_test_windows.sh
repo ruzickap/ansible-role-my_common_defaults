@@ -1,7 +1,8 @@
 #!/bin/bash -eu
 
-TEMP_PATH="/tmp/mytest/"
-VAGRANT_BOXES="peru/windows-server-2016-standard-x64-eval peru/windows-10-enterprise-x64-eval peru/windows-server-2012_r2-standard-x64-eval"
+TEMP_PATH="/tmp/vagrant_test_windows/"
+VAGRANT_BOXES="peru/windows-server-2012_r2-standard-x64-eval peru/windows-server-2016-standard-x64-eval peru/windows-10-enterprise-x64-eval"
+ANSIBLE_ROLE_DIR="$PWD/../"
 
 HOSTS=""
 for VAGRANT_BOX in $VAGRANT_BOXES; do
@@ -12,27 +13,33 @@ for VAGRANT_BOX in $VAGRANT_BOXES; do
 
   if [ ! -f $TEMP_PATH/$BOX/Vagrantfile ]; then
     test -d "$TEMP_PATH/$BOX" || mkdir -v -p "$TEMP_PATH/$BOX"
-    cd "$TEMP_PATH/$BOX"
-    vagrant init $VAGRANT_BOX
-    sed -i "/^Vagrant\.configure/a \ \ config.hostmanager.enabled = true\n \ config.hostmanager.manage_host = true\n \ config.hostmanager.aliases = \"$BOX\"" Vagrantfile
-    VAGRANT_DEFAULT_PROVIDER=libvirt vagrant up
-    cd -
+
+    docker pull peru/vagrant_libvirt_virtualbox
+    docker run --rm -it -u $(id -u):$(id -g) --privileged --net=host \
+    -e HOME=/home/docker \
+    -e VAGRANT_DEFAULT_PROVIDER=libvirt \
+    -e ANSIBLE_HOST_KEY_CHECKING=False \
+    -v /dev/vboxdrv:/dev/vboxdrv \
+    -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock \
+    -v $TEMP_PATH/$BOX:/home/docker/vagrant \
+    -v $ANSIBLE_ROLE_DIR:/home/docker/ansible_role \
+    -v $HOME/.vagrant.d/boxes:/home/docker/.vagrant.d/boxes \
+    peru/vagrant_libvirt_virtualbox "\
+    set -ux \
+    && vagrant init $VAGRANT_BOX \
+    && vagrant up \
+    && VAGRANT_HOST=\`vagrant ssh-config | awk '/HostName / { print \$2 }'\` \
+    && ansible-playbook --extra-vars \"ansible_winrm_read_timeout_sec=1000 ansible_winrm_operation_timeout_sec=900 ansible_user=Administrator ansible_password=vagrant ansible_connection=winrm ansible_winrm_server_cert_validation=ignore\" -i \$VAGRANT_HOST, \$HOME/ansible_role/tests/test.yml \
+    && ansible-playbook --extra-vars \"ansible_winrm_read_timeout_sec=1000 ansible_winrm_operation_timeout_sec=900 ansible_user=Administrator ansible_password=vagrant ansible_connection=winrm ansible_winrm_server_cert_validation=ignore\" -i \$VAGRANT_HOST, \$HOME/ansible_role/tests/test.yml \
+    && bash \
+    ;  vagrant destroy -f \
+    "
+
+  echo "*** Removing $VAGRANT_BOX : $BOX: $TEMP_PATH/$BOX"
+  rm -rf "$TEMP_PATH/$BOX/"{Vagrantfile,.vagrant}
+  rmdir "$TEMP_PATH/$BOX"
+
   else
     echo "*** $TEMP_PATH/$BOX/Vagrantfile exists... skipping provisioning"
   fi
-done
-
-ansible-playbook --extra-vars "ansible_user=Administrator ansible_password=vagrant ansible_port=5986 ansible_connection=winrm ansible_winrm_server_cert_validation=ignore" -i "$HOSTS," ./test.yml
-
-echo "Press ENTER to Destroy all VMs (or CRTL+C to cancel)"
-read A
-
-for VAGRANT_BOX in $VAGRANT_BOXES; do
-  BOX="${VAGRANT_BOX##*/}"
-  echo "*** Removing $VAGRANT_BOX : $BOX: $TEMP_PATH/$BOX"
-
-  cd "$TEMP_PATH/$BOX"
-  vagrant destroy -f
-  cd -
-  rm -rf "$TEMP_PATH/$BOX"
 done

@@ -1,4 +1,6 @@
 ---
+# vars file for my_common_defaults
+
 skel_copy_users:
   - /home/ubuntu
   - /home/centos

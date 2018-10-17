@@ -1,4 +1,6 @@
 ---
+# handlers file for my_common_defaults
+
 - name: restart sshd
   service:
     name: "{{ ssh_daemon }}"

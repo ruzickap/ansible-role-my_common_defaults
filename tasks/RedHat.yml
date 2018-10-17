@@ -96,41 +96,44 @@
   tags:
     - ntp
 
-- name: Backup original /etc/yum/yum-cron.conf and /etc/yum/yum-cron-hourly.conf if exists
-  shell: cp {{ item }} {{ item }}.orig
-  args:
-    creates: "{{ item }}.orig"
-  loop:
-    - /etc/yum/yum-cron.conf
-    - /etc/yum/yum-cron-hourly.conf
-  register: yum_cron_cp_status
-  tags:
-    - yum-cron
+- name: Chnage /etc/yum/yum-cron.conf
+  block:
+    - name: Backup original /etc/yum/yum-cron.conf and /etc/yum/yum-cron-hourly.conf if exists
+      shell: cp {{ item }} {{ item }}.orig
+      args:
+        creates: "{{ item }}.orig"
+      loop:
+        - /etc/yum/yum-cron.conf
+        - /etc/yum/yum-cron-hourly.conf
+      register: yum_cron_cp_status
+      tags:
+        - yum-cron
 
-- name: Configure yum-cron
-  replace:
-    path: /etc/yum/yum-cron.conf
-    regexp: "{{ item.regexp }}"
-    replace: "{{ item.replace }}"
-  loop:
-    - { regexp: '^apply_updates.*', replace: 'apply_updates = yes' }
-  when: yum_cron_cp_status.changed
-  tags:
-    - yum-cron
+    - name: Configure yum-cron
+      replace:
+        path: /etc/yum/yum-cron.conf
+        regexp: "{{ item.regexp }}"
+        replace: "{{ item.replace }}"
+      loop:
+        - { regexp: '^apply_updates.*', replace: 'apply_updates = yes' }
+      when: yum_cron_cp_status.changed
+      tags:
+        - yum-cron
 
-- name: Configure yum-cron
-  replace:
-    dest: /etc/yum/yum-cron-hourly.conf
-    regexp: "{{ item.regexp }}"
-    replace: "{{ item.replace }}"
-  loop:
-    - { regexp: '^update_cmd.*', replace: 'update_cmd = security-severity:Critical' }
-    - { regexp: '^apply_updates.*', replace: 'apply_updates = yes' }
-    - { regexp: '^update_messages.*', replace: 'update_messages = yes' }
-    - { regexp: '^download_updates.*', replace: 'download_updates = yes' }
-  when: yum_cron_cp_status.changed
-  tags:
-    - yum-cron
+    - name: Configure yum-cron
+      replace:
+        dest: /etc/yum/yum-cron-hourly.conf
+        regexp: "{{ item.regexp }}"
+        replace: "{{ item.replace }}"
+      loop:
+        - { regexp: '^update_cmd.*', replace: 'update_cmd = security-severity:Critical' }
+        - { regexp: '^apply_updates.*', replace: 'apply_updates = yes' }
+        - { regexp: '^update_messages.*', replace: 'update_messages = yes' }
+        - { regexp: '^download_updates.*', replace: 'download_updates = yes' }
+      when: yum_cron_cp_status.changed
+      tags:
+        - yum-cron
+  when: ansible_distribution_major_version|int > 6
 
 - name: Add /usr/local/bin/etc_issue.sh script
   template:

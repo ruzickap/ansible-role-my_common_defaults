@@ -1,8 +1,7 @@
 ---
 galaxy_info:
   author: Petr Ruzicka
-  description: May favourite defaults for all OS
-  company: your company (optional)
+  description: My favourite defaults for all OS
 
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value

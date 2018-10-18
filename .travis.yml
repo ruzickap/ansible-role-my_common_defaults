@@ -18,5 +18,5 @@ script:
   # Run tests.
   - molecule test
 
-notifications:
-  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+# notifications:
+#   webhooks: https://galaxy.ansible.com/api/v1/notifications/

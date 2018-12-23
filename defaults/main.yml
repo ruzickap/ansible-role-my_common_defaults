@@ -1,9 +1,11 @@
 ---
 # defaults file for my_common_defaults
 
+# NTP servers
 ntp_servers:
   - 0.centos.pool.ntp.org
   - 1.centos.pool.ntp.org
   - 2.centos.pool.ntp.org
 
+# Allow reboots when Windows Updates are installed
 allow_windows_reboot_during_win_updates: true

@@ -188,18 +188,37 @@
     name: bginfo
     data: 'C:\ProgramData\chocolatey\bin\bginfo.exe C:\ProgramData\bginfo.bgi /silent /timer:0 /nolicprompt'
 
-- name: Install windows updates
+# Nasty hack fixing Windows Upgrades, failing with: {"failed": true, "failure_hresult_code": -2145116147, "id": "5d6314ec-c1bc-41f0-a3f9-f2ccf9ea6868", "installed": false, "kb": ["4483235"], "title": "2018-12 Cumulative Update for Windows 10 Version 1809 for x64-based Systems (KB4483235)"},
+# This is happening for Win2k19 and Win10
+- name: Install windows updates 1
   win_updates:
-    category_names:
-      - Application
-      - Connectors
-      - CriticalUpdates
-      - DefinitionUpdates
-      - DeveloperKits
-      - FeaturePacks
-      - Guidance
-      - SecurityUpdates
-      - ServicePacks
-      - Tools
-      - UpdateRollups
-      - Updates
+  category_names:
+    - Application
+    - Connectors
+    - CriticalUpdates
+    - DefinitionUpdates
+    - DeveloperKits
+    - FeaturePacks
+    - Guidance
+    - SecurityUpdates
+    - ServicePacks
+    - Tools
+    - UpdateRollups
+    - Updates
+  ignore_errors: true
+  register: windows_updates1
+
+- name: Windows reboot
+  win_reboot:
+  reboot_timeout: 10000
+  when: windows_updates1.reboot_required and allow_windows_reboot_during_win_updates
+
+- name: Install windows updates 2
+  win_updates:
+  ignore_errors: true
+  register: windows_updates2
+
+- name: Windows reboot
+  win_reboot:
+  reboot_timeout: 10000
+  when: windows_updates2.reboot_required and allow_windows_reboot_during_win_updates

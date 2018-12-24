@@ -192,25 +192,25 @@
 # This is happening for Win2k19 and Win10
 - name: Install windows updates 1
   win_updates:
-  category_names:
-    - Application
-    - Connectors
-    - CriticalUpdates
-    - DefinitionUpdates
-    - DeveloperKits
-    - FeaturePacks
-    - Guidance
-    - SecurityUpdates
-    - ServicePacks
-    - Tools
-    - UpdateRollups
-    - Updates
+    category_names:
+      - Application
+      - Connectors
+      - CriticalUpdates
+      - DefinitionUpdates
+      - DeveloperKits
+      - FeaturePacks
+      - Guidance
+      - SecurityUpdates
+      - ServicePacks
+      - Tools
+      - UpdateRollups
+      - Updates
   ignore_errors: true
   register: windows_updates1
 
 - name: Windows reboot
   win_reboot:
-  reboot_timeout: 10000
+    reboot_timeout: 10000
   when: windows_updates1.reboot_required and allow_windows_reboot_during_win_updates
 
 - name: Install windows updates 2
@@ -220,5 +220,5 @@
 
 - name: Windows reboot
   win_reboot:
-  reboot_timeout: 10000
+    reboot_timeout: 10000
   when: windows_updates2.reboot_required and allow_windows_reboot_during_win_updates

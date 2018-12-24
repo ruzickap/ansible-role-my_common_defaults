@@ -83,7 +83,7 @@
 
 - name: Allow ICMP
   win_firewall_rule:
-    name: File and Printer Sharing (Echo Request – ICMPv4-In)
+    name: File and Printer Sharing (Echo Request - ICMPv4-In)
     action: allow
     direction: in
     enabled: yes

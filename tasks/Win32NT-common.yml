@@ -77,16 +77,15 @@
     data: 0
     type: dword
 
+# Can't use ansible module because of: https://github.com/ansible/ansible/issues/32478
 - name: Allow RDP traffic
   win_shell: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
   changed_when: false
 
+# Can't use ansible module because of: https://github.com/ansible/ansible/issues/32478
 - name: Allow ICMP
-  win_firewall_rule:
-    name: File and Printer Sharing (Echo Request - ICMPv4-In)
-    action: allow
-    direction: in
-    enabled: yes
+  win_shell: Set-NetFirewallRule -DisplayName "File and Printer Sharing (Echo Request - ICMPv4-In)" -enabled True
+  changed_when: false
 
 - name: Show file extensions in Explorer
   win_regedit:

@@ -48,6 +48,7 @@
   file:
     path: /etc/skel/.config/mc
     state: directory
+    mode: 0700
   tags:
     - mc
 
@@ -86,19 +87,6 @@
     state: directory
     owner: "{{ item.stat.path | basename }}"
     group: "{{ item.stat.path | basename }}"
-  when: item.stat.exists
-  loop: "{{ stat_skel_copy_users.results }}"
-  loop_control:
-    label: "{{ item.item }}"
-  tags:
-    - mc
-    - skel
-
-- name: Change rights for skel_copy_users/.config
-  file:
-    path: "{{ item.stat.path }}/.config"
-    state: directory
-    mode: 0700
   when: item.stat.exists
   loop: "{{ stat_skel_copy_users.results }}"
   loop_control:

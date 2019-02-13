@@ -17,7 +17,7 @@
     regexp: '^FSCKFIX='
     line: "FSCKFIX=yes"
     backup: yes
-  when: rcS_stat.stat.exists == True
+  when: rcS_stat.stat.exists
   tags:
     - rcS
 
@@ -27,7 +27,7 @@
     regexp: '^TMPTIME='
     line: "TMPTIME=0"
     backup: yes
-  when: rcS_stat.stat.exists == True
+  when: rcS_stat.stat.exists
   tags:
     - rcS
 

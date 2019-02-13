@@ -64,7 +64,7 @@
     creates: /etc/default/grub.orig
   tags:
     - grub
-  when: grub_default.stat.exists == True
+  when: grub_default.stat.exists
 
 - name: Modify grub settings
   replace:
@@ -75,7 +75,7 @@
     - { regexp: '^GRUB_TIMEOUT=.*', replace: 'GRUB_TIMEOUT=1' }
     - { regexp: 'nofb quiet splash=quiet', replace: 'nofb quiet rootflags=usrquota,grpquota vmwgfx.enable_fbdev=0 verbose consoleblank=0 no_timer_check splash=quiet' }
   notify: generate grub configuration
-  when: grub_default.stat.exists == True
+  when: grub_default.stat.exists
   tags:
     - grub
 

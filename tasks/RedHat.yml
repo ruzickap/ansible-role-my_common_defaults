@@ -58,14 +58,6 @@
   tags:
     - grub
 
-- name: Backup grub settings
-  shell: cp /etc/default/grub /etc/default/grub.orig
-  args:
-    creates: /etc/default/grub.orig
-  tags:
-    - grub
-  when: grub_default.stat.exists
-
 - name: Modify grub settings
   replace:
     dest: /etc/default/grub
@@ -98,17 +90,6 @@
 
 - name: Chnage /etc/yum/yum-cron.conf
   block:
-    - name: Backup original /etc/yum/yum-cron.conf and /etc/yum/yum-cron-hourly.conf if exists
-      shell: cp {{ item }} {{ item }}.orig
-      args:
-        creates: "{{ item }}.orig"
-      loop:
-        - /etc/yum/yum-cron.conf
-        - /etc/yum/yum-cron-hourly.conf
-      register: yum_cron_cp_status
-      tags:
-        - yum-cron
-
     - name: Configure yum-cron
       replace:
         path: /etc/yum/yum-cron.conf
@@ -116,7 +97,6 @@
         replace: "{{ item.replace }}"
       loop:
         - { regexp: '^apply_updates.*', replace: 'apply_updates = yes' }
-      when: yum_cron_cp_status.changed
       tags:
         - yum-cron
 
@@ -130,7 +110,6 @@
         - { regexp: '^apply_updates.*', replace: 'apply_updates = yes' }
         - { regexp: '^update_messages.*', replace: 'update_messages = yes' }
         - { regexp: '^download_updates.*', replace: 'download_updates = yes' }
-      when: yum_cron_cp_status.changed
       tags:
         - yum-cron
   when: ansible_distribution_major_version|int > 6

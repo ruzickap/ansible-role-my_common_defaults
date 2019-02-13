@@ -164,7 +164,8 @@
     src: win/doublecmd.xml
     dest: '%APPDATA%\doublecmd\doublecmd.xml'
 
-- win_scheduled_task:
+- name: Add choco upgrade scheduled task
+  win_scheduled_task:
     name: choco upgrade
     description: Chocolatey update task - updates all apps installed by Chocolatey
     actions:

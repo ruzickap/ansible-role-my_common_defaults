@@ -30,19 +30,15 @@ matrix:
         - npm install -g markdownlint-cli markdown-link-check > /dev/null
       script:
         # Markdown check
-        - |
-          echo '"line-length": false' > /tmp/markdownlint_config.json
-          find . -name "*.md" -exec markdownlint -c /tmp/markdownlint_config.json {} \;
+        - find . -name "*.md" -exec markdownlint {} \;
 
         # Link Checks
-        - |
-          echo '{ "ignorePatterns": [ { "pattern": "^(http|https)://localhost" } ] }' > /tmp/config.json
-          find . -name "*.md" -exec markdown-link-check --config /tmp/config.json {} \;
+        - find . -name "*.md" -exec markdown-link-check {} \;
 
 install:
-  # Install test dependencies.
+  # Install test dependencies
   - pip install molecule docker
 
 script:
-  # Run tests.
+  # Run tests
   - molecule test

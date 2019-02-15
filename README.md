@@ -12,9 +12,11 @@ None
 
 Basic settings:
 
-    ntp_servers:
-      - 0.centos.pool.ntp.org
-      - 1.centos.pool.ntp.org
+```yaml
+ntp_servers:
+  - 0.centos.pool.ntp.org
+  - 1.centos.pool.ntp.org
+```
 
 ## Dependencies
 
@@ -25,11 +27,13 @@ None.
 Including an example of how to use your role (for instance, with variables
 passed in as parameters) is always nice for users too:
 
-    - hosts: all
-      become: yes
+```yaml
+- hosts: all
+  become: yes
 
-      roles:
-        - my_common_defaults
+  roles:
+    - my_common_defaults
+```
 
 ## License
 

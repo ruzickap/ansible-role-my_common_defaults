@@ -23,6 +23,7 @@ distribution_specific_packages:
   - libpam-systemd
   - linux-virtual
   - mtr-tiny
+  - policykit-1
   - snmp
   - snmpd
   - sosreport

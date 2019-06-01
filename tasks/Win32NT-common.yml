@@ -2,6 +2,8 @@
 - name: Install applications
   win_chocolatey:
     name: "{{ common_windows_packages }}"
+  register: result
+  until: result is succeeded
 
 - name: Install openssh
   win_chocolatey:

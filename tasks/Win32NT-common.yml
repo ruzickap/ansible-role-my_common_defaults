@@ -80,9 +80,12 @@
     type: dword
 
 # Can't use ansible module because of: https://github.com/ansible/ansible/issues/32478
-- name: Allow RDP traffic
-  win_shell: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+- name: Enable Firewall Inbound Rules Group
+  win_shell: Enable-NetFirewallRule -DisplayGroup "{{ item }}"
   changed_when: false
+  loop:
+    - Remote Desktop
+    - Windows Remote Management
 
 # Can't use ansible module because of: https://github.com/ansible/ansible/issues/32478
 - name: Allow ICMP

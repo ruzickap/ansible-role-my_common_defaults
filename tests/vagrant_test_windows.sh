@@ -29,8 +29,8 @@ for VAGRANT_BOX in $VAGRANT_BOXES; do
     && vagrant init $VAGRANT_BOX \
     && vagrant up \
     && VAGRANT_HOST=\`vagrant ssh-config | awk '/HostName / { print \$2 }'\` \
-    && ansible-playbook --extra-vars \"ansible_winrm_read_timeout_sec=1000 ansible_winrm_operation_timeout_sec=900 ansible_user=Administrator ansible_password=vagrant ansible_connection=winrm ansible_winrm_server_cert_validation=ignore\" -i \$VAGRANT_HOST, \$HOME/ansible_role/tests/test.yml \
-    && ansible-playbook --extra-vars \"ansible_winrm_read_timeout_sec=1000 ansible_winrm_operation_timeout_sec=900 ansible_user=Administrator ansible_password=vagrant ansible_connection=winrm ansible_winrm_server_cert_validation=ignore\" -i \$VAGRANT_HOST, \$HOME/ansible_role/tests/test.yml \
+    && ansible-playbook --extra-vars \"ansible_user=Administrator ansible_password=vagrant ansible_connection=winrm ansible_winrm_server_cert_validation=ignore\" -i \$VAGRANT_HOST, \$HOME/ansible_role/tests/test.yml \
+    && ansible-playbook --extra-vars \"ansible_user=Administrator ansible_password=vagrant ansible_connection=winrm ansible_winrm_server_cert_validation=ignore\" -i \$VAGRANT_HOST, \$HOME/ansible_role/tests/test.yml \
     && bash \
     ;  vagrant destroy -f \
     "

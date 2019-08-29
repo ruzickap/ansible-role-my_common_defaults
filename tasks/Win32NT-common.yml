@@ -87,6 +87,9 @@
     - Remote Desktop
     - Windows Remote Management
 
+- name: Use the plaintext WinRM transport and force it to use basic authentication
+  win_shell: winrm set winrm/config/service '@{AllowUnencrypted="true"}'
+
 # Can't use ansible module because of: https://github.com/ansible/ansible/issues/32478
 - name: Allow ICMP
   win_shell: Set-NetFirewallRule -DisplayName "File and Printer Sharing (Echo Request - ICMPv4-In)" -enabled True

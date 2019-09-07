@@ -20,9 +20,6 @@ matrix:
     - name: "Ubuntu 18.04 Tests"
       env:
         - MOLECULE_DISTRO: ubuntu1804
-    - name: "Ubuntu 16.04 Tests"
-      env:
-        - MOLECULE_DISTRO: ubuntu1604
     - name: "Markdown test"
       install:
         # Install markdownlint and markdown-link-check

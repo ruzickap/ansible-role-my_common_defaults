@@ -10,6 +10,12 @@
     name: openssh
     params: /SSHServerFeature /KeyBasedAuthenticationFeature
 
+- name: Disable common authorized key file for administrators group in sshd_config
+  win_lineinfile:
+    path: '%ProgramData%\ssh\sshd_config'
+    regexp: 'AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys'
+    line: '# AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys'
+
 - name: Firewall rule to allow SSH on TCP port 22
   win_firewall_rule:
     name: OpenSSH

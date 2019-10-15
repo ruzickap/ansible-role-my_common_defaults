@@ -9,7 +9,6 @@ skel_copy_users:
 
 common_packages:
   - acpid
-  - atop
   - bash-completion
   - byobu
   - cloud-init
@@ -46,6 +45,5 @@ common_packages:
 
 enable_boot_services:
   - acpid
-  - atop
   - haveged
   - serial-getty@ttyS1.service

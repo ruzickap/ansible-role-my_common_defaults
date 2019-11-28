@@ -10,12 +10,9 @@ for MOLECULE_DISTRO in $MOLECULE_DISTROS; do
   molecule test
 done
 
-
 MOLECULE_DISTROS="centos7"
 MOLECULE_DOCKER_COMMAND="/usr/lib/systemd/systemd"
 
-for MOLECULE_DISTRO in $MOLECULE_DISTROS; do
-  echo "*** $MOLECULE_DISTRO"
-  export MOLECULE_DISTRO
-  molecule test
-done
+echo "*** $MOLECULE_DISTRO"
+export MOLECULE_DISTRO MOLECULE_DOCKER_COMMAND
+molecule test

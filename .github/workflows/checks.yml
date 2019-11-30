@@ -1,5 +1,5 @@
 ---
-name: "check"
+name: "checks"
 
 on:
   push:

@@ -10,7 +10,7 @@ for MOLECULE_DISTRO in $MOLECULE_DISTROS; do
   molecule test
 done
 
-MOLECULE_DISTROS="centos7"
+MOLECULE_DISTRO="centos7"
 MOLECULE_DOCKER_COMMAND="/usr/lib/systemd/systemd"
 
 echo "*** $MOLECULE_DISTRO"

@@ -9,8 +9,6 @@ logwatch_cron_daily_file: 0logwatch
 
 sysstat_cron_entry: '\*/10 \* \* \* \*'
 
-ssh_daemon: sshd
-
 epel_repo_url: "http://download.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
 epel_repo_gpg_key_url: "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
 epel_repofile_path: "/etc/yum.repos.d/epel.repo"

@@ -3,7 +3,7 @@
 
 - name: restart sshd
   service:
-    name: "{{ ssh_daemon }}"
+    name: sshd
     state: restarted
 
 - name: reload snmpd

@@ -1,7 +1,7 @@
 #!/bin/bash -eu
 
 TEMP_PATH="/tmp/vagrant_test_linux/"
-VAGRANT_BOXES="centos/7 peru/ubuntu-18.04-server-amd64 peru/ubuntu-16.04-server-amd64 peru/ubuntu-14.04-server-amd64"
+VAGRANT_BOXES="centos/7 peru/ubuntu-18.04-server-amd64 peru/ubuntu-16.04-server-amd64"
 ANSIBLE_ROLE_DIR="$PWD/../"
 
 

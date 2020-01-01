@@ -144,13 +144,20 @@
     data: "{{ item.data }}"
     type: dword
   loop:
-    - { name: TCPKeepalives, data: 1 }
-    - { name: PingIntervalSecs, data: 30 }
-    - { name: Compression, data: 1 }
-    - { name: AgentFwd, data: 1 }
-    - { name: LinuxFunctionKeys, data: 1 }
-    - { name: MouseIsXterm, data: 1 }
-    - { name: ConnectionSharing, data: 1 }
+    - name: TCPKeepalives
+      data: 1
+    - name: PingIntervalSecs
+      data: 30
+    - name: Compression
+      data: 1
+    - name: AgentFwd
+      data: 1
+    - name: LinuxFunctionKeys
+      data: 1
+    - name: MouseIsXterm
+      data: 1
+    - name: ConnectionSharing
+      data: 1
 
 - name: Configure WinSCP
   win_copy:

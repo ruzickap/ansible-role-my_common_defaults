@@ -64,8 +64,10 @@
     regexp: "{{ item.regexp }}"
     replace: "{{ item.replace }}"
   loop:
-    - { regexp: '^GRUB_TIMEOUT=.*', replace: 'GRUB_TIMEOUT=1' }
-    - { regexp: 'nofb quiet splash=quiet', replace: 'nofb quiet rootflags=usrquota,grpquota vmwgfx.enable_fbdev=0 verbose consoleblank=0 no_timer_check splash=quiet' }
+    - regexp: '^GRUB_TIMEOUT=.*'
+      replace: 'GRUB_TIMEOUT=1'
+    - regexp: 'nofb quiet splash=quiet'
+      replace: 'nofb quiet rootflags=usrquota,grpquota vmwgfx.enable_fbdev=0 verbose consoleblank=0 no_timer_check splash=quiet'
   notify: generate grub configuration
   when: grub_default.stat.exists
   tags:
@@ -96,7 +98,8 @@
         regexp: "{{ item.regexp }}"
         replace: "{{ item.replace }}"
       loop:
-        - { regexp: '^apply_updates.*', replace: 'apply_updates = yes' }
+        - regexp: '^apply_updates.*'
+          replace: 'apply_updates = yes'
       tags:
         - yum-cron
 
@@ -106,10 +109,14 @@
         regexp: "{{ item.regexp }}"
         replace: "{{ item.replace }}"
       loop:
-        - { regexp: '^update_cmd.*', replace: 'update_cmd = security-severity:Critical' }
-        - { regexp: '^apply_updates.*', replace: 'apply_updates = yes' }
-        - { regexp: '^update_messages.*', replace: 'update_messages = yes' }
-        - { regexp: '^download_updates.*', replace: 'download_updates = yes' }
+        - regexp: '^update_cmd.*'
+          replace: 'update_cmd = security-severity:Critical'
+        - regexp: '^apply_updates.*'
+          replace: 'apply_updates = yes'
+        - regexp: '^update_messages.*'
+          replace: 'update_messages = yes'
+        - regexp: '^download_updates.*'
+          replace: 'download_updates = yes'
       tags:
         - yum-cron
   when: ansible_distribution_major_version|int > 6

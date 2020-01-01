@@ -64,8 +64,10 @@
     regexp: "{{ item.regexp }}"
     replace: "{{ item.replace }}"
   loop:
-    - { regexp: '^//Unattended-Upgrade::Mail "root";', replace: 'Unattended-Upgrade::Mail "root";' }
-    - { regexp: '^//Unattended-Upgrade::Remove-Unused-Dependencies "false";', replace: 'Unattended-Upgrade::Remove-Unused-Dependencies "true";' }
+    - regexp: '^//Unattended-Upgrade::Mail "root";'
+      replace: 'Unattended-Upgrade::Mail "root";'
+    - regexp: '^//Unattended-Upgrade::Remove-Unused-Dependencies "false";'
+      replace: 'Unattended-Upgrade::Remove-Unused-Dependencies "true";'
   tags:
     - unattended-upgrades
 

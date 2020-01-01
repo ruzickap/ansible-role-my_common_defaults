@@ -200,8 +200,10 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   loop:
-    - { regexp: '^PermitRootLogin', line: 'PermitRootLogin yes' }
-    - { regexp: '^PasswordAuthentication', line: 'PasswordAuthentication yes' }
+    - regexp: '^PermitRootLogin'
+      line: 'PermitRootLogin yes'
+    - regexp: '^PasswordAuthentication'
+      line: 'PasswordAuthentication yes'
   notify: restart sshd
   tags:
     - sshd

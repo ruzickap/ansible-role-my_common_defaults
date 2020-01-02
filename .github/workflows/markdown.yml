@@ -1,5 +1,5 @@
 ---
-name: checks
+name: markdown
 
 on:
   push:
@@ -39,30 +39,4 @@ jobs:
         run: npm install -g markdown-spellcheck
 
       - name: Run mdspell
-        run: find . -type f -name "*.md" | xargs --max-args=1 --verbose  mdspell --ignore-numbers --ignore-acronyms --report --en-gb
-
-  checks:
-    name: Molecule checks
-    runs-on: ubuntu-18.04
-    strategy:
-      matrix:
-        env:
-          - MOLECULE_DISTRO: centos7
-            MOLECULE_DOCKER_COMMAND: /usr/lib/systemd/systemd
-          - MOLECULE_DISTRO: centos6
-          - MOLECULE_DISTRO: ubuntu1804
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Update repositories
-        run: sudo apt update
-
-      - name: Install Setuptools
-        run: sudo apt-get install -y python3-setuptools
-
-      - name: Install test dependencies
-        run: sudo -H pip3 install molecule docker
-
-      - name: Run tests
-        run: molecule test
+        run: find . -type f -name "*.md" | xargs --max-args=1 --verbose  mdspell --ignore-numbers --ignore-acronyms --report --en-us

@@ -3,7 +3,7 @@
   yum:
     name: "{{ remove_distribution_specific_packages }}"
     state: absent
-  when: remove_distribution_specific_packages
+  when: remove_distribution_specific_packages is defined
   tags:
     - packages
 

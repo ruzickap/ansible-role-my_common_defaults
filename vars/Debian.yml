@@ -23,6 +23,7 @@ distribution_specific_packages:
   - policykit-1
   - snmp
   - snmpd
+  - software-properties-common
   - sosreport
   - tcpflow
   - tmpreaper

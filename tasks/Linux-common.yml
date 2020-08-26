@@ -42,6 +42,7 @@
   template:
     src: etc/profile.d/my-mc.sh.j2
     dest: /etc/profile.d/my-mc.sh
+    mode: u=rw,g=r,o=r
   tags:
     - mc
 
@@ -56,7 +57,8 @@
 - name: Create directory for mc inside /etc/skel
   copy:
     src: etc/skel/.config/mc/ini
-    dest: /etc/skel/.config/mc/
+    dest: /etc/skel/.config/mc/ini
+    mode: u=rw,g=r,o=r
   tags:
     - mc
 
@@ -84,10 +86,10 @@
 - name: Change owner for skel_copy_users/.config
   file:
     path: "{{ item.stat.path }}/.config"
-    recurse: yes
     state: directory
     owner: "{{ item.stat.path | basename }}"
     group: "{{ item.stat.path | basename }}"
+    mode: '0700'
   when: item.stat.exists
   loop: "{{ stat_skel_copy_users.results }}"
   loop_control:
@@ -158,6 +160,7 @@
     line: "Range = between -7 days and -1 days"
     create: yes
     backup: yes
+    mode: u=rw,g=r,o=r
   tags:
     - logwatch
 
@@ -234,6 +237,7 @@
   template:
     src: etc/cloud/cloud.cfg.d/91_my.cfg
     dest: /etc/cloud/cloud.cfg.d/
+    mode: u=rw,g=r,o=r
   tags:
     - cloud-init
 
@@ -252,6 +256,7 @@
     regexp: '(\s)defaults'
     replace: '\1 noatime,nodiratime,defaults'
     backup: yes
+    mode: u=rw,g=r,o=r
   tags:
     - fstab
 
@@ -267,6 +272,7 @@
     dest: /root/.ssh/authorized_keys
     regexp: "^no-port-forwarding,no-agent-forwarding,no-X11-forwarding,command=\"echo \\'Please login as the user \\\\\"{{ ansible_user }}\\\\\" rather than the user \\\\\"root\\\\\".\\';echo;sleep 10\" ssh-.*"
     backup: yes
+    mode: '0600'
   when: root_authorized_keys.stat.exists
   tags:
     - ssh

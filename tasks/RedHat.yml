@@ -63,6 +63,7 @@
     dest: /etc/default/grub
     regexp: "{{ item.regexp }}"
     replace: "{{ item.replace }}"
+    mode: u=rw,g=r,o=r
   loop:
     - regexp: '^GRUB_TIMEOUT=.*'
       replace: 'GRUB_TIMEOUT=1'
@@ -79,6 +80,7 @@
     regexp: 'SYNC_HWCLOCK=no'
     replace: 'SYNC_HWCLOCK=yes'
     backup: yes
+    mode: u=rw,g=r,o=r
   tags:
     - ntp
 
@@ -87,6 +89,7 @@
     src: etc/ntp/step-tickers.j2
     dest: /etc/ntp/step-tickers
     backup: yes
+    mode: u=rw,g=r,o=r
   tags:
     - ntp
 
@@ -97,6 +100,7 @@
         path: /etc/yum/yum-cron.conf
         regexp: "{{ item.regexp }}"
         replace: "{{ item.replace }}"
+        mode: u=rw,g=r,o=r
       loop:
         - regexp: '^apply_updates.*'
           replace: 'apply_updates = yes'
@@ -108,6 +112,7 @@
         dest: /etc/yum/yum-cron-hourly.conf
         regexp: "{{ item.regexp }}"
         replace: "{{ item.replace }}"
+        mode: u=rw,g=r,o=r
       loop:
         - regexp: '^update_cmd.*'
           replace: 'update_cmd = security-severity:Critical'
@@ -142,5 +147,6 @@
   copy:
     src: etc/rsyslog.d/ignore-systemd-session-slice.conf
     dest: /etc/rsyslog.d/ignore-systemd-session-slice.conf
+    mode: u=rw,g=r,o=r
   tags:
     - syslog

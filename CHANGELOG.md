@@ -1,5 +1,16 @@
 # Changelog
 
+## [v0.1.0](https://github.com/ruzickap/ansible-role-my_common_defaults/compare/v0.0.1...v0.1.0) (2020-09-17)
+
+- Fix mode in ansible playbooks [`#9`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/9)
+- Replace markdown link checker by action-my-markdown-link-checker [`#8`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/8)
+- Replace markdown linter [`#7`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/7)
+- Replace markdown linter [`#6`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/6)
+- Remove spaces at the end of lines [`#5`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/5)
+- Upgrade shellcheck to latest version [`#4`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/4)
+- Add colours to molecule and ansible [`#3`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/3)
+- CHANGELOG file update [`#2`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/2)
+
 ## v0.0.1 (2020-05-09)
 
 - Merge pull request #1 from ruzickap/gh_workflows [`445cd3d`](https://github.com/ruzickap/ansible-role-my_common_defaults/commit/445cd3d27887aed9ac7e3cfa4c0dbb4407e85e98)

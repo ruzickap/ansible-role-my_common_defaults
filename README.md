@@ -1,7 +1,5 @@
 # Ansible Role: my_common_defaults
 
-[![Build Status](https://travis-ci.com/ruzickap/ansible-role-my_common_defaults.svg?branch=master)](https://travis-ci.com/ruzickap/ansible-role-my_common_defaults)
-
 My Common Defaults for Red Hat and Debian based OS.
 
 ## Requirements

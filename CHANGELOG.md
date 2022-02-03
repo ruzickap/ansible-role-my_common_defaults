@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.1.1](https://github.com/ruzickap/ansible-role-my_common_defaults/compare/v0.1.0...v0.1.1)
+
+- Move from master to main [`#15`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/15)
+- Fix linting issues [`#14`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/14)
+- Upgrade GH Actions versions [`#13`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/13)
+- Fix tests [`#12`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/12)
+- Fix tests, improve Doublecmd settings [`#11`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/11)
+
 ## [v0.1.0](https://github.com/ruzickap/ansible-role-my_common_defaults/compare/v0.0.1...v0.1.0) (2020-09-17)
 
 - Fix mode in ansible playbooks [`#9`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/9)
@@ -9,7 +17,6 @@
 - Remove spaces at the end of lines [`#5`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/5)
 - Upgrade shellcheck to latest version [`#4`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/4)
 - Add colours to molecule and ansible [`#3`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/3)
-- CHANGELOG file update [`#2`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/2)
 
 ## v0.0.1 (2020-05-09)
 

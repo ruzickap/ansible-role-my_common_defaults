@@ -1,5 +1,7 @@
 ---
 galaxy_info:
+  namespace: ruzickap
+  role_name: my_common_defaults
   author: Petr Ruzicka
   description: My favourite defaults for all OS
 

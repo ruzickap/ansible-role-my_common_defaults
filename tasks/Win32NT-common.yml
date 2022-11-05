@@ -131,12 +131,6 @@
     name: telnet-client
   when: ansible_distribution is not search("Microsoft Windows 10")
 
-- name: Put PuTTY link to desktop
-  win_copy:
-    src: '%APPDATA%\Microsoft\Windows\Start Menu\Programs\PuTTY (64-bit)\PuTTY.lnk'
-    dest: '%PUBLIC%\Desktop\'
-    remote_src: true
-
 - name: Configure PuTTY
   win_regedit:
     path: 'HKCU:\SOFTWARE\SimonTatham\PuTTY\Sessions\Default%20Settings'

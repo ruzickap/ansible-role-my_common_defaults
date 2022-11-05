@@ -133,7 +133,7 @@
 
 - name: Put PuTTY link to desktop
   win_copy:
-    src: '%PROGRAMDATA%\Microsoft\Windows\Start Menu\Programs\PuTTY (64-bit)\PuTTY.lnk'
+    src: '%APPDATA%\Microsoft\Windows\Start Menu\Programs\PuTTY (64-bit)\PuTTY.lnk'
     dest: '%PUBLIC%\Desktop\'
     remote_src: true
 

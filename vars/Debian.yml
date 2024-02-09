@@ -1,5 +1,4 @@
 ---
-
 mc_wrapper_sh_path: /usr/share/mc/bin/mc-wrapper.sh
 
 vimrc_configuration_file: /etc/vim/vimrc
@@ -34,7 +33,6 @@ distribution_specific_packages:
 desktop_spice_packages:
   - spice-vdagent
   - xserver-xorg-video-qxl
-
 # disable_distribution_specific_boot_services:
 
 # enable_distribution_specific_boot_services:

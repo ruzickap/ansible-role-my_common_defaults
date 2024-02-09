@@ -21,6 +21,10 @@
       rpm_key:
         key: "{{ epel_repo_gpg_key_url }}"
       when: not epel_repofile_result.stat.exists
+  rescue:
+    - name: Print when errors
+      ansible.builtin.debug:
+        msg: "I caught an error..."
   when: ansible_os_family == 'RedHat'
 
 - name: Install common packages
@@ -89,7 +93,7 @@
     state: directory
     owner: "{{ item.stat.path | basename }}"
     group: "{{ item.stat.path | basename }}"
-    mode: '0700'
+    mode: "0700"
   when: item.stat.exists
   loop: "{{ stat_skel_copy_users.results }}"
   loop_control:
@@ -109,7 +113,7 @@
 - name: Add sar alias ({{ bashrc_configuration_file }})
   lineinfile:
     dest: "{{ bashrc_configuration_file }}"
-    regexp: '^alias sar='
+    regexp: "^alias sar="
     line: "alias sar='LANG=C sar'"
     backup: yes
   tags:
@@ -156,7 +160,7 @@
 - name: Change logwatch to display weekly status (/etc/logwatch/conf/logwatch.conf)
   lineinfile:
     dest: /etc/logwatch/conf/logwatch.conf
-    regexp: '^Range ='
+    regexp: "^Range ="
     line: "Range = between -7 days and -1 days"
     create: yes
     backup: yes
@@ -203,10 +207,10 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   loop:
-    - regexp: '^PermitRootLogin'
-      line: 'PermitRootLogin yes'
-    - regexp: '^PasswordAuthentication'
-      line: 'PasswordAuthentication yes'
+    - regexp: "^PermitRootLogin"
+      line: "PermitRootLogin yes"
+    - regexp: "^PasswordAuthentication"
+      line: "PasswordAuthentication yes"
   notify: restart sshd
   tags:
     - sshd
@@ -272,7 +276,7 @@
     dest: /root/.ssh/authorized_keys
     regexp: "^no-port-forwarding,no-agent-forwarding,no-X11-forwarding,command=\"echo \\'Please login as the user \\\\\"{{ ansible_user }}\\\\\" rather than the user \\\\\"root\\\\\".\\';echo;sleep 10\" ssh-.*"
     backup: yes
-    mode: '0600'
+    mode: "0600"
   when: root_authorized_keys.stat.exists
   tags:
     - ssh

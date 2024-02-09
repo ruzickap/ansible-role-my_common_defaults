@@ -14,7 +14,7 @@
 - name: Enable fsckfix during boot
   lineinfile:
     dest: /etc/default/rcS
-    regexp: '^FSCKFIX='
+    regexp: "^FSCKFIX="
     line: "FSCKFIX=yes"
     backup: yes
   when: rcS_stat.stat.exists
@@ -24,7 +24,7 @@
 - name: Remove /tmp/* files during boot
   lineinfile:
     dest: /etc/default/rcS
-    regexp: '^TMPTIME='
+    regexp: "^TMPTIME="
     line: "TMPTIME=0"
     backup: yes
   when: rcS_stat.stat.exists
@@ -34,7 +34,7 @@
 - name: Enable sysstat (sar)
   lineinfile:
     dest: /etc/default/sysstat
-    regexp: '^ENABLED='
+    regexp: "^ENABLED="
     line: 'ENABLED="true"'
     backup: yes
   tags:
@@ -43,8 +43,8 @@
 - name: Change shell to /bin/bash for new users (/etc/default/useradd)
   lineinfile:
     dest: /etc/default/useradd
-    regexp: '^SHELL='
-    line: 'SHELL=/bin/bash'
+    regexp: "^SHELL="
+    line: "SHELL=/bin/bash"
     backup: yes
   tags:
     - sysstat
@@ -52,8 +52,8 @@
 - name: Change shell to /bin/bash for new users (/etc/default/useradd)
   lineinfile:
     dest: /etc/tmpreaper.conf
-    regexp: '^SHOWWARNING='
-    line: 'SHOWWARNING=false'
+    regexp: "^SHOWWARNING="
+    line: "SHOWWARNING=false"
     backup: yes
   tags:
     - tmpreaper

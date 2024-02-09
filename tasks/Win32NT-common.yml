@@ -13,8 +13,8 @@
 - name: Disable common authorized key file for administrators group in sshd_config
   win_lineinfile:
     path: '%ProgramData%\ssh\sshd_config'
-    regexp: 'AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys'
-    line: '# AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys'
+    regexp: "AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys"
+    line: "# AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys"
 
 - name: Firewall rule to allow SSH on TCP port 22
   win_firewall_rule:
@@ -187,7 +187,7 @@
         arguments: upgrade all -y
     triggers:
       - type: daily
-        start_boundary: '2017-10-09T01:00:00'
+        start_boundary: "2017-10-09T01:00:00"
     run_level: highest
     username: SYSTEM
 

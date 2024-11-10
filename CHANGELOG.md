@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.0](https://github.com/ruzickap/ansible-role-my_common_defaults/compare/v0.1.1...v0.2.0) (2024-11-10)
+
+
+### Features
+
+* fix ci - molecule ([#41](https://github.com/ruzickap/ansible-role-my_common_defaults/issues/41)) ([c71f620](https://github.com/ruzickap/ansible-role-my_common_defaults/commit/c71f620c9bb091d74b7209ce91bb4f56df711d00))
+* **gh_actions:** replace stale + add commitlint ([f75b388](https://github.com/ruzickap/ansible-role-my_common_defaults/commit/f75b3880dbbb98a58053be12653639722a599abb))
+* **gh-actions:** add lint-pr-title ([fa01d46](https://github.com/ruzickap/ansible-role-my_common_defaults/commit/fa01d46ffe760d70be73e42fc8efd14ebe038542))
+* **gh:** add default GitHub repo files ([7e6cbb4](https://github.com/ruzickap/ansible-role-my_common_defaults/commit/7e6cbb47e873dc9930ef48e18abcdd7d0d71c1eb))
+* **gh:** add default GitHub repo files ([#37](https://github.com/ruzickap/ansible-role-my_common_defaults/issues/37)) ([95dc364](https://github.com/ruzickap/ansible-role-my_common_defaults/commit/95dc364e4edfe5648e174c5e1b3fab71d46ee99c))
+* **gha:** unify GHA - renovate, megalinter, markdown, and others ([7d37dca](https://github.com/ruzickap/ansible-role-my_common_defaults/commit/7d37dca53d0dc15619c47dd61fec639b0352772d))
+
 ## [v0.1.1](https://github.com/ruzickap/ansible-role-my_common_defaults/compare/v0.1.0...v0.1.1)
 
 - Move from master to main [`#15`](https://github.com/ruzickap/ansible-role-my_common_defaults/pull/15)

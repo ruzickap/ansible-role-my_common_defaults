@@ -9,3 +9,6 @@ editor_return_does_auto_indent=0
 keybar_visible=0
 menubar_visible=0
 message_visible=0
+
+[Panels]
+navigate_with_arrows=1

@@ -6,5 +6,6 @@ confirm_exit=0
 editor_return_does_auto_indent=0
 
 [Layout]
+keybar_visible=0
 menubar_visible=0
 message_visible=0

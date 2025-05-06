@@ -2,4 +2,4 @@
 - name: Converge
   hosts: all
   roles:
-    - role: ansible-role-my_common_defaults
+    - role: ruzickap.my_common_defaults
